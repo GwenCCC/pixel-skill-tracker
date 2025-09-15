@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Experience Tracker</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>▓▓▓ Experience Tracker ▓▓▓</h1>
+            <button id="settings-btn" class="settings-btn">⚙️</button>
+        </div>
+
+        <div class="nav-tabs">
+            <div class="nav-tab active" onclick="showTab('dashboard')">📊 Dashboard</div>
+            <div class="nav-tab" onclick="showTab('add-record')">➕ Add Record</div>
+            <div class="nav-tab" onclick="showTab('skills')">🎯 Skills</div>
+            <div class="nav-tab" onclick="showTab('records')">📚 History</div>
+        </div>
+
+        <!-- Dashboard -->
+        <div id="dashboard" class="tab-content active">
+            <h2>▓▓▓ Stats Panel ▓▓▓</h2>
+            <div class="dashboard-grid">
+                <div class="stat-card">
+                    <h3>Total EXP</h3>
+                    <div id="total-exp">0</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Today EXP</h3>
+                    <div id="today-exp">0</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Skills Count</h3>
+                    <div id="skill-count">0</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Max Level</h3>
+                    <div id="max-level">Lv.0</div>
+                </div>
+            </div>
+
+            <h2>▓▓▓ Skills List ▓▓▓</h2>
+            <div id="skills-display" class="skills-grid">
+                <!-- Skill cards will be generated here -->
+            </div>
+        </div>
+
+        <!-- Add Record -->
+        <div id="add-record" class="tab-content">
+            <form id="exp-form">
+                    <div class="form-row">
+                        <div class="form-col">
+                            <label for="skill-select">🎯 Skill:</label>
+                            <select id="skill-select" required>
+                                <option value="">Choose skill...</option>
+                            </select>
+                        </div>
+                        <div class="form-col">
+                            <label for="exp-value">⚡ EXP:</label>
+                            <input type="number" id="exp-value" min="1" max="1000" required placeholder="Amount">
+                        </div>
+                    </div>
+                    
+                    <div class="quick-exp-row">
+                        <button type="button" class="quick-exp-btn" onclick="setExpValue(10)">+10</button>
+                        <button type="button" class="quick-exp-btn" onclick="setExpValue(25)">+25</button>
+                        <button type="button" class="quick-exp-btn" onclick="setExpValue(50)">+50</button>
+                        <button type="button" class="quick-exp-btn" onclick="setExpValue(100)">+100</button>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-col-full">
+                            <label for="exp-note">📝 Notes:</label>
+                            <textarea id="exp-note" rows="2" placeholder="What did you learn or practice?"></textarea>
+                        </div>
+                    </div>
+                    
+                    <div class="form-submit">
+                        <button type="submit" class="btn btn-primary">🚀 Add Record</button>
+                    </div>
+                </form>
+        </div>
+
+        <!-- Skills Management -->
+        <div id="skills" class="tab-content">
+            <h2>🎯 Skills Management</h2>
+            
+            <div class="skills-grid" id="skills-grid">
+                <!-- Add new skill card -->
+                <div class="skill-card add-skill-card" id="add-skill-card">
+                    <div class="add-skill-content">
+                        <div class="add-skill-icon">➕</div>
+                        <h3>Create New Skill</h3>
+                        <p>Click to add a new skill to track</p>
+                    </div>
+                </div>
+                
+                <!-- Existing skills will be generated here -->
+            </div>
+            
+            <!-- Modal for creating/editing skills -->
+            <div id="skill-modal" class="modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 id="modal-title">🎯 Create New Skill</h3>
+                        <span class="close" id="close-modal">&times;</span>
+                    </div>
+                    <form id="skill-form">
+                        <div class="form-group">
+                            <label for="skill-name">Skill Name:</label>
+                            <input type="text" id="skill-name" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="skill-category">Category:</label>
+                            <select id="skill-category">
+                                <option value="Learning">📚 Learning</option>
+                                <option value="Sports">⚽ Sports</option>
+                                <option value="Creative">🎨 Creative</option>
+                                <option value="Life">🏠 Life</option>
+                                <option value="Other">🔧 Other</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="skill-description">Description:</label>
+                            <textarea id="skill-description" rows="3" placeholder="Describe your skill..."></textarea>
+                        </div>
+                        
+                        <div class="modal-actions">
+                            <button type="submit" class="btn">Create Skill</button>
+                            <button type="button" class="btn btn-cancel" id="cancel-btn">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Skill Details Modal -->
+            <div id="skill-details-modal" class="modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 id="details-modal-title">🎯 Skill Details</h3>
+                        <span class="close" onclick="document.getElementById('skill-details-modal').style.display='none'">&times;</span>
+                    </div>
+                    <div class="modal-body">
+                        <div id="skill-details-content">
+                            <!-- Content will be populated by JavaScript -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Records History -->
+        <div id="records" class="tab-content">
+            <h2>▓▓▓ Experience Records History ▓▓▓</h2>
+            <div id="records-list">
+                <!-- Records list will be generated here -->
+            </div>
+        </div>
+
+        <!-- Settings -->
+        <div id="settings" class="tab-content">
+            <h2>▓▓▓ Settings ▓▓▓</h2>
+            
+            <div class="form-group">
+                <label for="theme-select">Choose Theme:</label>
+                <select id="theme-select">
+                    <option value="default">Default (Green)</option>
+                    <option value="blue">Blue Theme</option>
+                    <option value="purple">Purple Theme</option>
+                    <option value="orange">Orange Theme</option>
+                    <option value="red">Red Theme</option>
+                </select>
+            </div>
+            
+            <button class="btn" onclick="applyTheme()">Apply Theme</button>
+            <button class="btn" onclick="resetData()">Reset All Data</button>
+        </div>
+    </div>
+
+    <!-- 通知提示 -->
+    <div id="notification" class="notification"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>
