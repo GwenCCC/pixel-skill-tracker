@@ -133,6 +133,32 @@ class DataManager {
         }
     }
 
+    deleteRecord(recordId) {
+        const recordIndex = this.expRecords.findIndex(r => r.id === recordId);
+        if (recordIndex === -1) return false;
+        
+        const record = this.expRecords[recordIndex];
+        const skill = this.skills.find(s => s.id === record.skill_id);
+        
+        if (skill) {
+            // 扣除对应的经验值
+            skill.total_exp -= record.exp_value;
+            // 确保经验值不为负数
+            if (skill.total_exp < 0) skill.total_exp = 0;
+            // 重新计算等级
+            skill.level = this.calculateLevel(skill.total_exp);
+        }
+        
+        // 删除记录
+        this.expRecords.splice(recordIndex, 1);
+        
+        // 保存数据
+        this.saveRecords();
+        this.saveSkills();
+        
+        return true;
+    }
+
     getTotalExp() {
         return this.getActiveSkills().reduce((total, skill) => total + skill.total_exp, 0);
     }
@@ -480,26 +506,59 @@ function deleteSkill(skillId) {
     }
 }
 
+function deleteRecord(recordId) {
+    if (confirm('确定要删除这条记录吗？删除后将扣除对应的经验值。')) {
+        const success = dataManager.deleteRecord(recordId);
+        if (success) {
+            // 更新所有相关的UI
+            updateDashboard();
+            updateSkillsList();
+            updateRecordsList();
+            showNotification('✅ 记录删除成功！');
+        } else {
+            showNotification('❌ 删除失败，记录不存在', true);
+        }
+    }
+}
+
 function updateRecordsList() {
     const recordsList = document.getElementById('records-list');
     recordsList.innerHTML = '';
     
-    // Sort records by date (newest first)
-    const sortedRecords = [...dataManager.expRecords].sort((a, b) => new Date(b.date) - new Date(a.date));
+    // Sort records by timestamp (newest first) for more precise ordering
+    const sortedRecords = [...dataManager.expRecords].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
     
     sortedRecords.forEach(record => {
         const skill = dataManager.skills.find(s => s.id === record.skill_id);
         const skillName = skill ? skill.name : 'Deleted Skill';
         
+        // Format timestamp for display
+        const recordTime = new Date(record.timestamp);
+        const timeString = recordTime.toLocaleString('zh-CN', {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit'
+        });
+        
         const recordDiv = document.createElement('div');
         recordDiv.className = 'record-item';
         recordDiv.innerHTML = `
-            <div>
-                <strong>${skillName}</strong> +${record.exp_value} EXP<br>
-                <small>${record.note || 'No notes'}</small>
+            <div class="record-content">
+                <div class="record-info">
+                    <strong>${skillName}</strong> +${record.exp_value} EXP<br>
+                    <small>${record.note || 'No notes'}</small>
+                </div>
+                <div class="record-date">
+                    <small>${timeString}</small>
+                </div>
             </div>
-            <div>
-                <small>${record.date}</small>
+            <div class="record-actions">
+                <button class="btn-delete" onclick="deleteRecord('${record.id}')" title="Delete Record">
+                    🗑️
+                </button>
             </div>
         `;
         recordsList.appendChild(recordDiv);

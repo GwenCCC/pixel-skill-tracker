@@ -757,6 +757,48 @@ textarea {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    transition: all 0.3s ease;
+}
+
+.record-item:hover {
+    background-color: var(--card-bg);
+    box-shadow: 0 2px 8px var(--shadow-color);
+}
+
+.record-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex: 1;
+}
+
+.record-info {
+    flex: 1;
+}
+
+.record-date {
+    margin-left: 20px;
+}
+
+.record-actions {
+    margin-left: 15px;
+}
+
+.btn-delete {
+    background: #ff4444;
+    border: 2px solid #000;
+    color: white;
+    padding: 8px 12px;
+    cursor: pointer;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 12px;
+    transition: all 0.2s ease;
+}
+
+.btn-delete:hover {
+    background: #cc0000;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(255, 68, 68, 0.3);
 }
 
 /* Level Colors */
