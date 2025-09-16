@@ -76,27 +76,49 @@ class DataManager {
     }
 
     calculateLevel(totalExp) {
-        // Level formula: level = floor(sqrt(exp / 100)) + 1
-        return Math.floor(Math.sqrt(totalExp / 100)) + 1;
+        // 指数增长模型：Lv(n) -> Lv(n+1) 所需经验 = 100 * (1.2)^(n-1)
+        // 计算当前等级
+        let level = 1;
+        let expNeeded = 0;
+        
+        while (expNeeded <= totalExp) {
+            const expForThisLevel = 100 * Math.pow(1.2, level - 1);
+            if (expNeeded + expForThisLevel > totalExp) {
+                break;
+            }
+            expNeeded += expForThisLevel;
+            level++;
+        }
+        
+        return level;
+    }
+
+    // 获取到达指定等级所需的总经验值
+    getTotalExpForLevel(level) {
+        let totalExp = 0;
+        for (let i = 1; i < level; i++) {
+            totalExp += 100 * Math.pow(1.2, i - 1);
+        }
+        return Math.floor(totalExp);
     }
 
     getExpForNextLevel(currentExp) {
         const currentLevel = this.calculateLevel(currentExp);
-        const nextLevelExp = Math.pow(currentLevel, 2) * 100;
-        return nextLevelExp - currentExp;
+        const currentLevelTotalExp = this.getTotalExpForLevel(currentLevel);
+        const nextLevelTotalExp = this.getTotalExpForLevel(currentLevel + 1);
+        return nextLevelTotalExp - currentExp;
     }
 
     getExpForCurrentLevel(currentExp) {
         const currentLevel = this.calculateLevel(currentExp);
-        const currentLevelExp = Math.pow(currentLevel - 1, 2) * 100;
-        return currentExp - currentLevelExp;
+        const currentLevelTotalExp = this.getTotalExpForLevel(currentLevel);
+        return currentExp - currentLevelTotalExp;
     }
 
     getExpNeededForCurrentLevel(currentExp) {
         const currentLevel = this.calculateLevel(currentExp);
-        const currentLevelExp = Math.pow(currentLevel - 1, 2) * 100;
-        const nextLevelExp = Math.pow(currentLevel, 2) * 100;
-        return nextLevelExp - currentLevelExp;
+        // 当前等级升级到下一等级所需的经验值
+        return Math.floor(100 * Math.pow(1.2, currentLevel - 1));
     }
 
     getActiveSkills() {
