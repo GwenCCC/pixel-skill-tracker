@@ -1282,11 +1282,11 @@ textarea {
 }
 
 .skill-name {
-    font-size: 11px;
+    font-size: 14px;
     font-weight: bold;
     color: var(--text-color);
     margin: 0;
-    text-shadow: 1px 1px 0px #000;
+    text-shadow: none;
     font-family: 'Press Start 2P', monospace;
 }
 
