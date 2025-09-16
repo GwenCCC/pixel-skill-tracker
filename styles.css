@@ -493,12 +493,30 @@ button:hover, .btn:hover {
     background: transparent;
     border: 3px solid #000;
     border-radius: 0;
-    padding: 20px;
+    padding: 12px 20px;
     text-align: center;
     box-shadow: 4px 4px 0px #000;
     transition: all 0.2s ease;
     position: relative;
     overflow: hidden;
+    height: 45px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.stat-card h3 {
+    margin: 0 0 4px 0;
+    font-size: 14px;
+    line-height: 1;
+}
+
+.stat-card div {
+    margin: 0;
+    font-size: 16px;
+    font-weight: bold;
+    line-height: 1;
 }
 
 .stat-card::before {
