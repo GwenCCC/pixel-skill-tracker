@@ -27,9 +27,7 @@ Create a skill on the **Skills** tab first, then add EXP on **Add Record**; the 
 
 ### Levelling
 
-`level = floor(sqrt(exp / 100)) + 1`
-
-Each level band gets its own colour, and the progress bar on a skill card shows how far into the current level you are.
+Each level costs 20% more EXP than the previous one: level *n* needs `100 × 1.2^(n-1)` EXP, so the cumulative totals are 100 / 220 / 364 / 537 for Lv2 / Lv3 / Lv4 / Lv5. Level bands get their own colour, and a skill card's progress bar shows how far into the current level you are.
 
 ### Files
 
