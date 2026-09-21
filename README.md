@@ -1,4 +1,4 @@
-# Experience Tracker
+# Pixel Skill Tracker
 
 **[▶ Live demo](https://gwenccc.github.io/pixel-skill-tracker/)** · [English](#english) | [中文](#中文)
 

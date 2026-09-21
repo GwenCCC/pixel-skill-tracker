@@ -1,4 +1,4 @@
-// Experience Tracker JavaScript
+// Pixel Skill Tracker — JavaScript
 
 // Data Storage and Management
 class DataManager {
