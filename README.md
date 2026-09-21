@@ -35,6 +35,7 @@ Each level band gets its own colour, and the progress bar on a skill card shows 
 index.html        # markup — the whole UI shell
 styles.css        # pixel-art styling and the five colour themes
 script.js         # state, localStorage persistence, rendering
+screenshot.png    # the dashboard shot above
 需求文档.md        # the original design notes (Chinese)
 LICENSE
 ```
@@ -68,7 +69,7 @@ LICENSE
 
 ### 等级公式
 
-`level = floor(sqrt(exp / 100)) + 1`。不同等级区间有不同配色，技能卡上的进度条显示当前等级内的进度。
+每级所需经验比上一级多 20%：第 *n* 级需要 `100 × 1.2^(n-1)` 点，累计到 Lv2 / Lv3 / Lv4 / Lv5 分别是 100 / 220 / 364 / 537。不同等级区间有不同配色，技能卡上的进度条显示当前等级内的进度。
 
 ### 文件
 
@@ -76,6 +77,7 @@ LICENSE
 index.html        # 页面结构
 styles.css        # 像素风样式与五套主题
 script.js         # 状态、localStorage 持久化、渲染
+screenshot.png    # 上面那张面板截图
 需求文档.md        # 最初的设计说明
 LICENSE
 ```
